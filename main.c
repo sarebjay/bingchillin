@@ -732,22 +732,14 @@ void inputs_update(Inputs *i) {
 bool editor_update(Editor *e) {
     inputs_update(&e->inputs);
 
-    if (IsKeyDown(KEY_LEFT_CONTROL)) {
-        if (editor_key_pressed(KEY_EQUAL))
-            editor_set_font_size(e, e->fontSize + 1);
-
-        if (editor_key_pressed(KEY_MINUS))
-            editor_set_font_size(e, e->fontSize - 1);
-
-        if (IsKeyPressed(KEY_A)) editor_select_all(e);
-
-        if (IsKeyPressed(KEY_S)) editor_save_file(e);
-        if (IsKeyPressed(KEY_Q)) return true;
-
-        if (IsKeyPressed(KEY_C)) editor_copy(e);
-        if (IsKeyPressed(KEY_X)) editor_cut(e);
-        if (editor_key_pressed(KEY_V)) editor_paste(e);
-    }
+    if (e->inputs.quit) return true;
+    if (e->inputs.save_file) editor_save_file(e);
+    if (e->inputs.select_all) editor_select_all(e);
+    if (e->inputs.zoom_in) editor_set_font_size(e, e->fontSize + 1);
+    if (e->inputs.zoom_out) editor_set_font_size(e, e->fontSize - 1);
+    if (e->inputs.copy) editor_copy(e);
+    if (e->inputs.cut) editor_cut(e);
+    if (e->inputs.paste) editor_paste(e);
 
     // -------------------
     // Movement stuff
